@@ -24,8 +24,8 @@
 // all fares something like: [7.3125, 15.75, 7.775, 10.5, ...]
 // Or if property = 'age' -> [40, 26, 22, 28, 23, 45, 21, ...]
 
-function getAllValuesForProperty(data, property) {
-	return []
+const getAllValuesForProperty = (data, property) => {
+	return data.map(item => item.fields[property]).filter(value => value !== undefined);
 }
 
 // 2 -------------------------------------------------------------
@@ -33,8 +33,8 @@ function getAllValuesForProperty(data, property) {
 // For example property = 'sex' and value = 'male' returns an 
 // array of all the male passengers [{...}, {...}, {...}, ...]
 
-function filterByProperty(data, property, value) {
-	return []
+const filterByProperty = (data, property, value) => {
+	return data.filter(item => item.fields[property] === value);
 }
 
 // 3 -------------------------------------------------------------
@@ -42,8 +42,8 @@ function filterByProperty(data, property, value) {
 // Return an array where the objects that have undefined for a 
 // given property have been removed
 
-function filterNullForProperty(data, property) {
-	return []
+const filterNullForProperty = (data, property) => {
+	return data.filter(item => item.fields[property] !== undefined);
 }
 
 // 4 -------------------------------------------------------------
@@ -51,8 +51,14 @@ function filterNullForProperty(data, property) {
 // for any (numeric) property
 // Return the total of all values for a given property. This
 
-function sumAllProperty(data, property) {
-	return 0
+const sumAllProperty = (data, property) => {
+	return data.reduce((sum, item) => {
+		const value = item.fields[property];
+		if(typeof value === 'number') {
+			return sum + value;
+		}
+			return sum;
+	}, 0);
 }
 
 
@@ -66,8 +72,15 @@ function sumAllProperty(data, property) {
 // That is 644 passengers embarked at South Hampton. 168 embarked 
 // at Cherbourg, 77 emabrked at Queenstown, and 2 are undedfined
 
-function countAllProperty(data, property) {
-	return {}
+const countAllProperty = (data, property) => {
+	const count = {};
+	data.forEach(item => {
+		const value = item.fields[property];
+		if (value !== undefined) {
+			count[value] = (count[value] || 0) + 1;
+		}
+	});
+	return count;
 }
 
 
@@ -76,17 +89,31 @@ function countAllProperty(data, property) {
 // of a properties divided into buckets and counting the number
 // of items in each bucket.
 
-function makeHistogram(data, property, step) {
-	return []
-}
+const makeHistogram = (data, property, step) => {
+	const histogram = [];
+	data.forEach(item => {
+		const value = item.fields[property];
+		if (typeof value === 'number' && !isNaN(value)) {
+			const bucketIndex = Math.floor(value / step);
+			if (histogram[bucketIndex] === undefined) {
+				histogram[bucketIndex] = 0;
+			}
+			histogram[bucketIndex]++;
+		}
+	});
+	return histogram;
+};
 
 // 7 ------------------------------------------------------------
 // normalizeProperty takes data and a property and returns an 
 // array of normalized values. To normalize the values you need
 // to divide each value by the maximum value in the array.
 
-function normalizeProperty(data, property) {
-	return []
+const normalizeProperty = (data, property) => {
+	const value = data.map(item => item.fields[property]).filter(value => typeof value === 'number' && isNaN(value));;
+	const max = Math.max(...value);
+	const normalized = values.map(value => value / max);
+	return normalized;
 }
 
 // --------------------------------------------------------------

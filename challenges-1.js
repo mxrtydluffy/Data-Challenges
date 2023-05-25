@@ -21,7 +21,7 @@
 // Return the total number of passengers. 
 // Return a number.
 
-const getTotalPassengers(data) {
+const getTotalPassengers = (data) => {
 	return data.length
 }
 
@@ -30,7 +30,7 @@ const getTotalPassengers(data) {
 // if their survived property is "Yes".
 // Return a number.
 
-const getSurvivorCount(data) {
+const getSurvivorCount = (data) => {
 	const survivors = data.filter(item => item.fields.survived === "Yes");
 	return survivors.length;
 }
@@ -39,7 +39,7 @@ const getSurvivorCount(data) {
 // Return the number of passengers who did not survive. A passenger
 // Return a number.
 
-const getCasualityCount(data) {
+const getCasualityCount = (data) => {
 	const casualties = data.filter(item => item.fields.survived === "No");
 	return casualties.length;
 }
@@ -50,7 +50,7 @@ const getCasualityCount(data) {
 // passengers whose pclass matches and return the count. 
 // Return a number
 
-const countPassengersInClass(data, pclass) {
+const countPassengersInClass = (data, pclass) => {
 	const passengers = data.filter(item => item.fields.pclass === pclass);
 	return passengers.length;
 }
@@ -79,7 +79,7 @@ const getCasualityCountForClass = (data, pclass) => {
 // passenger data where the age is missing. 
 
 const getMinAge = (data) => {
-	const ages = data.filter(item => item.fields.age != undefined);
+	const ages = data.filter(item => item.fields.age !== undefined);
 	const minAge = Math.min(...validAges.map(item => item.fields.age));
 	return minAge;
 }
@@ -88,7 +88,7 @@ const getMinAge = (data) => {
 // Return the age of the oldest passenger. 
 
 const getMaxAge = (data) => {
-	const ages = data.filter(item => item.fields.age != undefined);
+	const ages = data.filter(item => item.fields.age !== undefined);
 	const maxAge = Math.max(...validAges.map(item => itemfields.age));
 	return maxAge;
 }
@@ -108,7 +108,7 @@ const getEmbarkedCount = (data, embarked) => {
 // for some passengers you'll need to filter this out! 
 
 const getMinFare = (data) => {
-	const Fares = data.filter(item => item.fields.fare != undefined);
+	const Fares = data.filter(item => item.fields.fare !== undefined);
 	if (Fares.length === 0) {
 		return null;
 	}
@@ -121,7 +121,7 @@ const getMinFare = (data) => {
 // passengers are missing data for fare.
 
 const getMaxFare = (data) => {
-	const validFares = data.filter(item => item.fields.fare != undefined);
+	const validFares = data.filter(item => item.fields.fare !== undefined);
 	if (validFares.length === 0) {
 		return null;
 	}
@@ -159,7 +159,7 @@ const getCasualitiesByGender = (data, gender) => {
 // the records of the passengers that are missing
 
 const getTotalFare = (data) => {
-	const Fares = data.filter(item => item.fields.fare != undefined);
+	const Fares = data.filter(item => item.fields.fare !== undefined);
 	const totalFare = Fares.reduce((sum, item) => sum + item.fields.fare, 0);
 	return totalFare;
 }
@@ -211,7 +211,7 @@ const getAverageAge = (data) => {
 // Return the median age from passengers. 
 
 const getMedianAge = (data) => {
-	const Ages = data.filter(item => item.fields.age != undefined);
+	const Ages = data.filter(item => item.fields.age !== undefined);
 	const sortedAges = Ages.map(item => item.fields.age).sort((a, b) => a - b);
 	const length = sortedAges.length;
 
@@ -233,7 +233,7 @@ const getMedianAge = (data) => {
 // Add up all the ages for the gender and divide by total number.
 
 const getAverageAgeByGender = (data, gender) => {
-	const Ages = data.filter(item => item.fields.age != undefined && item.fields.sex === gender);
+	const Ages = data.filter(item => item.fields.age !== undefined && item.fields.sex === gender);
 	const totalAge = Ages.reduce((sum, item) => sum + item.fields.age, 0);
 	const averageAge = totalAge / validAges.length;
 	return averageAge;
