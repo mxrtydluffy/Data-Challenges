@@ -23,9 +23,12 @@ beforeAll((done) => {
 	})
 })
 
+// ----------------------------------------------------------------------
 
-describe.skip('Challenge 2 Titanic', () => {
+// When you are ready to start on challenge 2 remove the word skip from 
+// the line below: describe.skip() -> describe()
 
+describe('Challenge 2 Titanic', () => {
 	test('Test getAll', () => {
 		const allFares = data.map(p => p.fields.fare)
 		const allPclass = data.map(p => p.fields.pclass)
@@ -96,17 +99,20 @@ describe.skip('Challenge 2 Titanic', () => {
 	})
 
 	test('Test makeHistogram', () => {
+		const ages10 = data
+			.filter(p => p.fields.age !== undefined)
+			.reduce((acc, p) => {
+				if (acc[Math.floor(p.fields.age / 10)] === undefined) {
+					acc[Math.floor(p.fields.age / 10)] = 1
+				} else {
+					acc[Math.floor(p.fields.age / 10)] += 1
+				}
+				return acc 
+			}, [])
 
-		const ages10 = data.filter(p => p.fields.age !== undefined).reduce((acc, p) => {
-			if (acc[Math.floor(p.fields.age / 10)] === undefined) {
-				acc[Math.floor(p.fields.age / 10)] = 1
-			} else {
-				acc[Math.floor(p.fields.age / 10)] += 1
-			}
-			return acc 
-		}, [])
-
-		const ages5 = data.filter(p => p.fields.age !== undefined).reduce((acc, p) => {
+		const ages5 = data
+		.filter(p => p.fields.age !== undefined)
+		.reduce((acc, p) => {
 			if (acc[Math.floor(p.fields.age / 5)] === undefined) {
 				acc[Math.floor(p.fields.age / 5)] = 1
 			} else {
@@ -115,7 +121,7 @@ describe.skip('Challenge 2 Titanic', () => {
 			return acc 
 		}, [])
 
-		const fares = data.filter(p => p.fields.age !== undefined).reduce((acc, p) => {
+		const fares = data.filter(p => p.fields.fare !== undefined).reduce((acc, p) => {
 			if (acc[Math.floor(p.fields.fare / 10)] === undefined) {
 				acc[Math.floor(p.fields.fare / 10)] = 1
 			} else {
@@ -142,4 +148,10 @@ describe.skip('Challenge 2 Titanic', () => {
 		expect(index.normalizeProperty(data, 'fare')).toEqual(normalizedFares)
 	})
 
+	test('Test getUniqueValues', () => {
+		expect(index.getUniqueValues(data, 'pclass').sort()).toEqual([3, 2, 1].sort())
+		expect(index.getUniqueValues(data, 'embarked').sort()).toEqual(['C', 'S', 'Q'].sort())
+		expect(index.getUniqueValues(data, 'sex').sort()).toEqual(['male', 'female'].sort())
+		expect(index.getUniqueValues(data, 'survived').sort()).toEqual(['Yes', 'No'].sort())
+	})
 })

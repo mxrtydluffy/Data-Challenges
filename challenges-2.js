@@ -25,8 +25,10 @@
 // Or if property = 'age' -> [40, 26, 22, 28, 23, 45, 21, ...]
 
 const getAllValuesForProperty = (data, property) => {
-	return data.map(item => item.fields[property]).filter(value => value !== undefined);
-}
+	const values = data.map((record) => record.fields[property]);
+  
+	return values;
+  };
 
 // 2 -------------------------------------------------------------
 // Return an array where a given property matches the given value
@@ -34,8 +36,8 @@ const getAllValuesForProperty = (data, property) => {
 // array of all the male passengers [{...}, {...}, {...}, ...]
 
 const filterByProperty = (data, property, value) => {
-	return data.filter(item => item.fields[property] === value);
-}
+	return data.filter((record) => record.fields[property] === value);
+};
 
 // 3 -------------------------------------------------------------
 // Filter out missing or null values
@@ -43,8 +45,8 @@ const filterByProperty = (data, property, value) => {
 // given property have been removed
 
 const filterNullForProperty = (data, property) => {
-	return data.filter(item => item.fields[property] !== undefined);
-}
+	return data.filter((record) => record.fields[property] !== undefined);
+};
 
 // 4 -------------------------------------------------------------
 // Abstract the sum by creating a function that returns the sum 
@@ -52,12 +54,12 @@ const filterNullForProperty = (data, property) => {
 // Return the total of all values for a given property. This
 
 const sumAllProperty = (data, property) => {
-	return data.reduce((sum, item) => {
-		const value = item.fields[property];
-		if(typeof value === 'number') {
-			return sum + value;
+	return data.reduce((total, record) => {
+		const value = record.fields[property];
+		if (typeof value === 'number') {
+			return total + value;
 		}
-			return sum;
+			return total;
 	}, 0);
 }
 
@@ -73,16 +75,26 @@ const sumAllProperty = (data, property) => {
 // at Cherbourg, 77 emabrked at Queenstown, and 2 are undedfined
 
 const countAllProperty = (data, property) => {
-	const count = {};
-	data.forEach(item => {
-		const value = item.fields[property];
-		if (value !== undefined) {
-			count[value] = (count[value] || 0) + 1;
+	const counts = {};
+
+	data.forEach((record) => {
+			const value = record.fields[property];
+			if (value !== undefined) {
+				if (counts[value]) {
+					counts[value]++;
+			} else {
+				counts[value] = 1;
+			}
+		} else {
+			if (counts.undefined) {
+				counts.undefined++;
+			} else {
+				counts.undefined = 1;
+			}
 		}
 	});
-	return count;
-}
-
+	return counts;
+};
 
 // 6 ------------------------------------------------------------
 // Make histogram. The goal is to return an array with values 
@@ -90,18 +102,20 @@ const countAllProperty = (data, property) => {
 // of items in each bucket.
 
 const makeHistogram = (data, property, step) => {
-	const histogram = [];
-	data.forEach(item => {
-		const value = item.fields[property];
-		if (typeof value === 'number' && !isNaN(value)) {
-			const bucketIndex = Math.floor(value / step);
-			if (histogram[bucketIndex] === undefined) {
-				histogram[bucketIndex] = 0;
+	const histogram = data.reduce((result, record) => {
+		const value = record.fields[property];
+		if (typeof value === "number") {
+			const bucket = Math.floor(value / step);
+			if (result[bucket]) {
+				result[bucket]++;
+			} else {
+				result[bucket] = 1;
 			}
-			histogram[bucketIndex]++;
 		}
-	});
-	return histogram;
+		return result;
+	}, []);
+
+	return Array.from(histogram, (v) => v || 0);
 };
 
 // 7 ------------------------------------------------------------
@@ -110,18 +124,56 @@ const makeHistogram = (data, property, step) => {
 // to divide each value by the maximum value in the array.
 
 const normalizeProperty = (data, property) => {
-	const value = data.map(item => item.fields[property]).filter(value => typeof value === 'number' && isNaN(value));;
-	const max = Math.max(...value);
-	const normalized = values.map(value => value / max);
-	return normalized;
-}
+	const values = data
+	  .map((record) => record.fields[property])
+	  .filter((value) => !isNaN(value));
+  
+	const maxValue = Math.max(...values);
+  
+	const normalizedValues = values.map((value) => value / maxValue);
+	return normalizedValues;
+  };
+
+// ===================================
+
+// Normalizing is an important process that can make many other
+// operations easier. Normalizing allows you to take numbers in one
+// range and convert them to any other range.
+// For this example you need to find the max value first before
+// generating an array of normalized values.
+
+// If the range of data included negative numbers or did not start at 0
+// we might also need to find the minimum value.
+
+// 8 ------------------------------------------------------------
+// Write a function that gets all unique values for a property.
+// Given the array of data and a property string it should return
+// an array of all of the unique values under that property.
+// For example if the property string were "sex" this function
+// would return ['male', 'female']
+
+const getUniqueValues = (data, property) => {
+	const values = data
+	  .map((record) => record.fields[property])
+	  .filter((value) => value !== undefined);
+	const uniqueValuesSet = new Set(values);
+	const uniqueValuesArray = Array.from(uniqueValuesSet);
+	return uniqueValuesArray;
+  };
+  
+  // There are a couple ways to do this.
+  // Use an object and add each value as a key. The value can be anything.
+  // Use a Set. Be sure to convert this to an array before returning!
 
 // --------------------------------------------------------------
 // --------------------------------------------------------------
-module.exports.getAllValuesForProperty = getAllValuesForProperty
-module.exports.filterByProperty = filterByProperty
-module.exports.filterNullForProperty = filterNullForProperty
-module.exports.sumAllProperty = sumAllProperty
-module.exports.countAllProperty = countAllProperty
-module.exports.makeHistogram = makeHistogram
-module.exports.normalizeProperty = normalizeProperty
+module.exports = {
+	getAllValuesForProperty,
+	filterByProperty,
+	filterNullForProperty,
+	sumAllProperty,
+	countAllProperty,
+	makeHistogram,
+	normalizeProperty,
+	getUniqueValues
+};

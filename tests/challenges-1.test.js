@@ -23,7 +23,6 @@ const json_data = './titanic-passengers.json'
 		})
 	})
 
-
 describe('Challenge 1 Titanic', () => {
 
 	test('Challenge 1: Test getTotalpassengers', () => {
@@ -93,37 +92,28 @@ describe('Challenge 1 Titanic', () => {
 		expect(index.getCasualitiesByGender(data, 'female')).toBe(81)
 	})
 
-	test('Challenge 15: Test getUniqueValues', () => {
-		expect(index.getUniqueValues(data, 'pclass').sort()).toEqual([3, 2, 1].sort())
-		expect(index.getUniqueValues(data, 'embarked').sort()).toEqual(['C', 'S', 'Q', undefined].sort())
-		expect(index.getUniqueValues(data, 'sex').sort()).toEqual(['male', 'female'].sort())
-		expect(index.getUniqueValues(data, 'survived').sort()).toEqual(['Yes', 'No'].sort())
-	})
-
-	test('Challenge 16: Test getTotalFare', () => {
+	test('Challenge 15: Test getTotalFare', () => {
 		expect(index.getTotalFare(data)).toBe(28693.94929999997)
 	})
 
-	test('Challenge 17: Test getAverageFare', () => {
+	test('Challenge 16: Test getAverageFare', () => {
 		expect(index.getAverageFare(data)).toBe(32.2042079685746)
 	})
 
-	test('Challenge 18: Test getMedianFare', () => {
+	test('Challenge 17: Test getMedianFare', () => {
 		expect(index.getMedianFare(data)).toBe(14.4542)
 	})
 
-	test('Challenge 19: Test getAverageAge', () => {
+	test('Challenge 18: Test getAverageAge', () => {
 		expect(index.getAverageAge(data)).toBe(29.69911764705882)
 	})
 
-	test('Challenge 20: Test getMedianAge', () => {
+	test('Challenge 19: Test getMedianAge', () => {
 		expect(index.getMedianAge(data)).toBe(28)
 	})
 
-	test('Challenge 21: Test getAverageAgeByGender', () => {
+	test('Challenge 20: Test getAverageAgeByGender', () => {
 		expect(index.getAverageAgeByGender(data, 'male')).toBe(30.72664459161148)
 		expect(index.getAverageAgeByGender(data, 'female')).toBe(27.915708812260537)
 	})
 })
-
-

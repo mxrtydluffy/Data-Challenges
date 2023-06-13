@@ -79,7 +79,7 @@ const getCasualityCountForClass = (data, pclass) => {
 // passenger data where the age is missing. 
 
 const getMinAge = (data) => {
-	const ages = data.filter(item => item.fields.age !== undefined);
+	const validAges = data.filter(item => item.fields.age !== undefined);
 	const minAge = Math.min(...validAges.map(item => item.fields.age));
 	return minAge;
 }
@@ -88,8 +88,8 @@ const getMinAge = (data) => {
 // Return the age of the oldest passenger. 
 
 const getMaxAge = (data) => {
-	const ages = data.filter(item => item.fields.age !== undefined);
-	const maxAge = Math.max(...validAges.map(item => itemfields.age));
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const maxAge = Math.max(...validAges.map(item => item.fields.age));
 	return maxAge;
 }
 
@@ -99,7 +99,7 @@ const getMaxAge = (data) => {
 // or Q. 
 
 const getEmbarkedCount = (data, embarked) => {
-	const passengers = data.filter(item.field.embarked === embarked);
+	const passengers = data.filter(item => item.fields.embarked === embarked);
 	return passengers.length;
 }
 
@@ -159,8 +159,8 @@ const getCasualitiesByGender = (data, gender) => {
 // the records of the passengers that are missing
 
 const getTotalFare = (data) => {
-	const Fares = data.filter(item => item.fields.fare !== undefined);
-	const totalFare = Fares.reduce((sum, item) => sum + item.fields.fare, 0);
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	const totalFare = validFares.reduce((sum, item) => sum + item.fields.fare, 0);
 	return totalFare;
 }
 
@@ -169,8 +169,8 @@ const getTotalFare = (data) => {
 // Add up fares and return number but make sure to filter
 // the records of the passengers that are missing a fare.
 const getAverageFare = (data) => {
-	const Fares = data.filter(item => item.fields.fare !== undefined);
-	const totalFare = Fares.reduce((sum, item) => sum + item.fields.fare, 0);
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	const totalFare = validFares.reduce((sum, item) => sum + item.fields.fare, 0);
 	const averageFare = totalFare / validFares.length;
 	return averageFare;
 }
@@ -180,8 +180,8 @@ const getAverageFare = (data) => {
 // from the minimum and maximum values. 
 
 const getMedianFare = (data) => {
-	const Fares = data.filter(item => item.fields.fare !== undefined);
-	const sortedFares = Fares.map(item => item.fields.fare).sort((a, b) => a - b);
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	const sortedFares = validFares.map(item => item.fields.fare).sort((a, b) => a - b);
 	const length = sortedFares.length;
 
 	if (length === 0) {
@@ -189,6 +189,7 @@ const getMedianFare = (data) => {
 	}
 
 	const middleIndex = Math.floor(length / 2);
+	
 	if (length % 2 === 0) {
 		const sumMiddleValues = sortedFares[middleIndex -1 ] + sortedFares[middleIndex];
 		return sumMiddleValues / 2;
@@ -201,8 +202,8 @@ const getMedianFare = (data) => {
 // Return the average age of all passengers. 
 
 const getAverageAge = (data) => {
-	const Ages = data.filter(item => item.fields.age !== undefined);
-	const totalAge = Ages.reduce((sum, item) => sum + item.fields.age, 0);
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const totalAge = validAges.reduce((sum, item) => sum + item.fields.age, 0);
 	const averageAge = totalAge / validAges.length;
 	return averageAge;
 }
@@ -211,8 +212,8 @@ const getAverageAge = (data) => {
 // Return the median age from passengers. 
 
 const getMedianAge = (data) => {
-	const Ages = data.filter(item => item.fields.age !== undefined);
-	const sortedAges = Ages.map(item => item.fields.age).sort((a, b) => a - b);
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const sortedAges = validAges.map(item => item.fields.age).sort((a, b) => a - b);
 	const length = sortedAges.length;
 
 	if (length === 0) {
@@ -222,7 +223,7 @@ const getMedianAge = (data) => {
 	const middleIndex = Math.floor(length / 2);
 
 	if (length % 2 === 0) {
-		const sumMiddleValues = sortedAged[middleIndex - 1] + sortedAges[middleIndex];
+		const sumMiddleValues = sortedAges[middleIndex - 1] + sortedAges[middleIndex];
 		return sumMiddleValues / 2;
 	} else {
 		return sortedAges[middleIndex];
@@ -233,34 +234,33 @@ const getMedianAge = (data) => {
 // Add up all the ages for the gender and divide by total number.
 
 const getAverageAgeByGender = (data, gender) => {
-	const Ages = data.filter(item => item.fields.age !== undefined && item.fields.sex === gender);
-	const totalAge = Ages.reduce((sum, item) => sum + item.fields.age, 0);
+	const validAges = data.filter(item => item.fields.age !== undefined && item.fields.sex === gender);
+	const totalAge = validAges.reduce((sum, item) => sum + item.fields.age, 0);
 	const averageAge = totalAge / validAges.length;
 	return averageAge;
 }
 
 // --------------------------------------------------------------
 // --------------------------------------------------------------
-module.exports.getTotalPassengers = getTotalPassengers
-module.exports.getSurvivorCount = getSurvivorCount
-module.exports.getCasualityCount = getCasualityCount
-module.exports.getUniqueValues = getUniqueValues
-module.exports.countPassengersInClass = countPassengersInClass
-module.exports.getSurvivorCountForClass = getSurvivorCountForClass
-module.exports.getCasualityCountForClass = getCasualityCountForClass
-module.exports.getMinAge = getMinAge
-module.exports.getMaxAge = getMaxAge
-module.exports.getEmbarkedCount = getEmbarkedCount
-module.exports.getMaxFare = getMaxFare
-module.exports.getMinFare = getMinFare
-module.exports.getPassengersByGender = getPassengersByGender
-module.exports.getSurvivorsByGender = getSurvivorsByGender
-module.exports.getCasualitiesByGender = getCasualitiesByGender
-module.exports.getSurvivorsByPClass = getSurvivorsByPClass
-module.exports.getCasualitiesByPClass = getCasualitiesByPClass
-module.exports.getTotalFare = getTotalFare
-module.exports.getAverageFare = getAverageFare
-module.exports.getMedianFare = getMedianFare
-module.exports.getAverageAge = getAverageAge
-module.exports.getMedianAge = getMedianAge
-module.exports.getAverageAgeByGender = getAverageAgeByGender
+module.exports = {
+	getTotalPassengers,
+	getSurvivorCount,
+	getCasualityCount,
+  	countPassengersInClass,
+  	getSurvivorCountForClass,
+	getCasualityCountForClass,
+	getMinAge,
+	getMaxAge,
+	getEmbarkedCount,
+	getMaxFare,
+	getMinFare,
+	getPassengersByGender,
+	getSurvivorsByGender,
+	getCasualitiesByGender,
+	getTotalFare,
+	getAverageFare,
+	getMedianFare,
+	getAverageAge,
+	getMedianAge,
+	getAverageAgeByGender
+}
